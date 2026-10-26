@@ -100,84 +100,126 @@
             border-color: #d97706 !important;
             box-shadow: 0 2px 8px rgba(245, 158, 11, 0.4);
         }
+        /* Smooth Collapsible Control Panel */
+        #control-panel-body {
+            transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease, transform 0.3s ease;
+            max-height: 320px;
+            opacity: 1;
+            transform: translateY(0);
+            overflow: hidden;
+        }
+        #control-panel-body.collapsed {
+            max-height: 0;
+            opacity: 0;
+            transform: translateY(-12px);
+            pointer-events: none;
+        }
     </style>
 </head>
 <body>
 
     <!-- =========================================================================
-         TOP CONTROL DECK (NEVER CUT OFF ON ANY DEVICE OR IFRAME)
+         COLLAPSIBLE TOP CONTROL DECK (CAN BE HIDDEN SO ROOM IS NEVER BLOCKED!)
          ========================================================================= -->
-    <div class="fixed top-2 left-2 right-2 z-30 pointer-events-none flex flex-col items-center gap-1.5">
+    <div class="fixed top-2 left-2 right-2 z-30 pointer-events-none flex flex-col items-center">
         
-        <!-- Row 1: Title + Primary Prominent Switches (Night Cozy Mode & Wall Height Mode) -->
-        <div class="w-full max-w-5xl bg-white/95 backdrop-blur-md border border-stone-300/90 shadow-lg rounded-2xl px-3 py-2 pointer-events-auto flex flex-wrap items-center justify-between gap-2">
+        <!-- Collapsible Main Panel -->
+        <div id="control-panel-body" class="w-full max-w-5xl flex flex-col items-center gap-1.5 pointer-events-auto">
             
-            <!-- Title & Operation Hint -->
-            <div class="flex items-center gap-2">
-                <span class="title-serif font-bold text-sm sm:text-lg text-stone-800 tracking-wide">1F FLOOR PLAN</span>
-                <span class="text-[10px] sm:text-xs font-bold text-amber-800 bg-amber-100 border border-amber-300 px-2 py-0.5 rounded-full">360° 3D</span>
-                <span class="hidden lg:inline-block text-[11px] text-stone-500 ml-1">（ドラッグで回転・ホイール/ピンチで拡大）</span>
-            </div>
-
-            <!-- Main Feature Switches (Super Prominent!) -->
-            <div class="flex flex-wrap items-center gap-1.5 sm:gap-2">
+            <!-- Row 1: Title + Primary Prominent Switches + Hide Button -->
+            <div class="w-full bg-white/95 backdrop-blur-md border border-stone-300/90 shadow-lg rounded-2xl px-3 py-2 flex flex-wrap items-center justify-between gap-2">
                 
-                <!-- 1. Wall Height Switcher -->
-                <div class="flex items-center bg-stone-100 p-1 rounded-xl border border-stone-200">
-                    <span class="text-[11px] font-bold text-stone-700 px-1.5 flex items-center gap-1">🧱 壁の高さ:</span>
-                    <button id="wall-full" onclick="setWallHeightMode('full')" class="px-2 py-1 rounded-lg text-[11px] font-bold transition mode-btn-active">
-                        標準
-                    </button>
-                    <button id="wall-low" onclick="setWallHeightMode('low')" class="px-2 py-1 rounded-lg text-[11px] font-bold text-stone-700 hover:bg-stone-200 transition">
-                        低くする (見やすい!)
-                    </button>
-                    <button id="wall-ultra" onclick="setWallHeightMode('ultra')" class="px-2 py-1 rounded-lg text-[11px] font-bold text-stone-700 hover:bg-stone-200 transition">
-                        極低
-                    </button>
+                <!-- Title & Operation Hint -->
+                <div class="flex items-center gap-2">
+                    <span class="title-serif font-bold text-sm sm:text-lg text-stone-800 tracking-wide">1F FLOOR PLAN</span>
+                    <span class="text-[10px] sm:text-xs font-bold text-amber-800 bg-amber-100 border border-amber-300 px-2 py-0.5 rounded-full">360° 3D</span>
+                    <span class="hidden xl:inline-block text-[11px] text-stone-500 ml-1">（ドラッグで回転・ホイール/ピンチで拡大）</span>
                 </div>
 
-                <!-- 2. Cozy Night Lighting Mode Toggle -->
-                <button id="btn-night" onclick="toggleNightMode()" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-gradient-to-r from-indigo-600 to-slate-800 text-white hover:from-indigo-700 hover:to-slate-900 shadow-md transition flex items-center gap-1.5 ring-2 ring-indigo-300">
-                    <span id="night-icon">🌙</span>
-                    <span id="night-text">夜くつろぎ照明: OFF</span>
-                </button>
+                <!-- Main Feature Switches (Super Prominent!) -->
+                <div class="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                    
+                    <!-- 1. Wall Height Switcher -->
+                    <div class="flex items-center bg-stone-100 p-1 rounded-xl border border-stone-200">
+                        <span class="text-[11px] font-bold text-stone-700 px-1.5 flex items-center gap-1">🧱 壁の高さ:</span>
+                        <button id="wall-full" onclick="setWallHeightMode('full')" class="px-2 py-1 rounded-lg text-[11px] font-bold transition mode-btn-active">
+                            標準
+                        </button>
+                        <button id="wall-low" onclick="setWallHeightMode('low')" class="px-2 py-1 rounded-lg text-[11px] font-bold text-stone-700 hover:bg-stone-200 transition">
+                            低くする (見やすい!)
+                        </button>
+                        <button id="wall-ultra" onclick="setWallHeightMode('ultra')" class="px-2 py-1 rounded-lg text-[11px] font-bold text-stone-700 hover:bg-stone-200 transition">
+                            極低
+                        </button>
+                    </div>
 
-                <!-- 3. Labels & Spin Toggles -->
-                <button id="btn-labels" onclick="toggleLabels()" class="px-2.5 py-1.5 rounded-xl text-[11px] font-bold bg-stone-100 text-stone-700 border border-stone-300 hover:bg-stone-200 transition">
-                    🏷️ 文字: ON
+                    <!-- 2. Cozy Night Lighting Mode Toggle -->
+                    <button id="btn-night" onclick="toggleNightMode()" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-gradient-to-r from-indigo-600 to-slate-800 text-white hover:from-indigo-700 hover:to-slate-900 shadow-md transition flex items-center gap-1.5 ring-2 ring-indigo-300">
+                        <span id="night-icon">🌙</span>
+                        <span id="night-text">夜くつろぎ照明: OFF</span>
+                    </button>
+
+                    <!-- 3. Labels & Spin Toggles -->
+                    <button id="btn-labels" onclick="toggleLabels()" class="px-2.5 py-1.5 rounded-xl text-[11px] font-bold bg-stone-100 text-stone-700 border border-stone-300 hover:bg-stone-200 transition">
+                        🏷️ 文字: ON
+                    </button>
+                    <button id="btn-spin" onclick="toggleAutoSpin()" class="px-2.5 py-1.5 rounded-xl text-[11px] font-bold bg-stone-100 text-stone-700 border border-stone-300 hover:bg-stone-200 transition">
+                        🔄 自動回転
+                    </button>
+
+                    <!-- 4. Collapse / Hide Panel Button -->
+                    <button onclick="toggleControlPanel(false)" class="px-2.5 py-1.5 rounded-xl text-[11px] font-bold bg-rose-50 text-rose-700 border border-rose-200 hover:bg-rose-100 transition flex items-center gap-1 shadow-sm" title="操作バーを隠して画面を広く使う">
+                        <span>🔼</span>
+                        <span>メニューを隠す</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Row 2: Camera Quick-Jump Preset Buttons -->
+            <div class="w-full bg-white/90 backdrop-blur-md border border-stone-200 shadow-md rounded-xl px-2.5 py-1.5 flex flex-wrap items-center justify-center gap-1.5">
+                <span class="text-[11px] font-bold text-stone-500 mr-1">📷 視点ジャンプ:</span>
+                
+                <button onclick="focusCamera('overview')" class="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-stone-800 text-white hover:bg-stone-700 transition">
+                    🏠 全体 (斜め)
                 </button>
-                <button id="btn-spin" onclick="toggleAutoSpin()" class="px-2.5 py-1.5 rounded-xl text-[11px] font-bold bg-stone-100 text-stone-700 border border-stone-300 hover:bg-stone-200 transition">
-                    🔄 自動回転
+                <button onclick="focusCamera('laundry')" class="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-amber-500 text-white hover:bg-amber-600 shadow-sm ring-1 ring-amber-300 transition">
+                    🧺 脱衣場・洗濯機＆シャワーを拡大
+                </button>
+                <button onclick="focusCamera('washroom')" class="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-stone-100 text-stone-700 hover:bg-stone-200 border border-stone-200 transition">
+                    🚰 洗面所・トイレ
+                </button>
+                <button onclick="focusCamera('living')" class="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-stone-100 text-stone-700 hover:bg-stone-200 border border-stone-200 transition">
+                    🛋️ リビング＆キッチン
+                </button>
+                <button onclick="focusCamera('bedsLeft')" class="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-stone-100 text-stone-700 hover:bg-stone-200 border border-stone-200 transition">
+                    🛏️ ベッド 1・2・3
+                </button>
+                <button onclick="focusCamera('bedsRight')" class="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-stone-100 text-stone-700 hover:bg-stone-200 border border-stone-200 transition">
+                    🛌 ベッド 4・5
+                </button>
+                <button onclick="focusCamera('topdown')" class="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-stone-100 text-stone-700 hover:bg-stone-200 border border-stone-200 transition">
+                    📐 真上から (平面図比較)
                 </button>
             </div>
         </div>
 
-        <!-- Row 2: Camera Quick-Jump Preset Buttons (Placed at Top so NEVER cut off at bottom!) -->
-        <div class="w-full max-w-5xl bg-white/90 backdrop-blur-md border border-stone-200 shadow-md rounded-xl px-2.5 py-1.5 pointer-events-auto flex flex-wrap items-center justify-center gap-1.5">
-            <span class="text-[11px] font-bold text-stone-500 mr-1">📷 視点ジャンプ:</span>
-            
-            <button onclick="focusCamera('overview')" class="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-stone-800 text-white hover:bg-stone-700 transition">
-                🏠 全体 (斜め)
-            </button>
-            <button onclick="focusCamera('laundry')" class="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-amber-500 text-white hover:bg-amber-600 shadow-sm ring-1 ring-amber-300 transition">
-                🧺 脱衣場・洗濯機＆シャワーを拡大
-            </button>
-            <button onclick="focusCamera('washroom')" class="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-stone-100 text-stone-700 hover:bg-stone-200 border border-stone-200 transition">
-                🚰 洗面所・トイレ
-            </button>
-            <button onclick="focusCamera('living')" class="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-stone-100 text-stone-700 hover:bg-stone-200 border border-stone-200 transition">
-                🛋️ リビング＆キッチン
-            </button>
-            <button onclick="focusCamera('bedsLeft')" class="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-stone-100 text-stone-700 hover:bg-stone-200 border border-stone-200 transition">
-                🛏️ ベッド 1・2・3
-            </button>
-            <button onclick="focusCamera('bedsRight')" class="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-stone-100 text-stone-700 hover:bg-stone-200 border border-stone-200 transition">
-                🛌 ベッド 4・5
-            </button>
-            <button onclick="focusCamera('topdown')" class="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-stone-100 text-stone-700 hover:bg-stone-200 border border-stone-200 transition">
-                📐 真上から (平面図比較)
-            </button>
+        <!-- Compact Floating Pill Button (Shown only when the main control bar is hidden!) -->
+        <div id="control-panel-minimized" class="hidden pointer-events-auto mt-0.5">
+            <div class="bg-white/90 backdrop-blur-md border border-stone-300 shadow-lg rounded-full px-2 py-1 flex items-center gap-1.5">
+                <button onclick="toggleControlPanel(true)" class="px-3 py-1 rounded-full text-xs font-bold bg-stone-800 text-white hover:bg-stone-700 transition flex items-center gap-1.5 shadow-sm">
+                    <span>⚙️</span>
+                    <span>操作メニューを表示</span>
+                    <span class="text-[10px] opacity-80">🔽</span>
+                </button>
+                <button onclick="setWallHeightMode(currentWallMode === 'full' ? 'low' : 'full')" id="mini-wall-btn" class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-stone-100 text-stone-700 hover:bg-stone-200 border border-stone-200 transition" title="壁の高さを切り替え">
+                    🧱 壁切替
+                </button>
+                <button onclick="toggleNightMode()" id="mini-night-btn" class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-indigo-50 text-indigo-800 hover:bg-indigo-100 border border-indigo-200 transition" title="夜くつろぎ照明を切り替え">
+                    🌙 照明
+                </button>
+            </div>
         </div>
+
     </div>
 
     <!-- 3D Room Labels Overlay Container -->
@@ -194,7 +236,7 @@
         const scene = new THREE.Scene();
 
         const camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.5, 200);
-        camera.position.set(0, 27, 24);
+        camera.position.set(0, 28, 25);
 
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: "high-performance" });
         renderer.setSize(window.innerWidth, window.innerHeight);
@@ -211,7 +253,7 @@
         controls.maxPolarAngle = Math.PI / 2 - 0.02; // Prevent camera going below floor
         controls.minDistance = 4;
         controls.maxDistance = 58;
-        controls.target.set(0, 0.3, 0.5);
+        controls.target.set(0, 0.2, -1.2);
 
         // Camera smooth animation state
         let camAnim = null;
@@ -232,7 +274,7 @@
         window.focusCamera = function(preset) {
             switch(preset) {
                 case 'overview':
-                    animateCameraTo([0, 27, 24], [0, 0.3, 0.5]);
+                    animateCameraTo([0, 28, 25], [0, 0.2, -1.2]);
                     break;
                 case 'laundry':
                     // Automatically lower walls slightly if full so user gets an unobstructed view of the washing machine & shower!
@@ -252,7 +294,7 @@
                     animateCameraTo([-2.2, 11.5, 2.0], [6.5, 0.8, -1.5]);
                     break;
                 case 'topdown':
-                    animateCameraTo([0, 35, 0.01], [0, 0, 0]);
+                    animateCameraTo([0, 36, 0.01], [0, 0, -1.0]);
                     break;
             }
         };
@@ -954,6 +996,22 @@
         // ============================================================================
         // 7. WALL HEIGHT MODE & COZY NIGHT MODE CONTROLS
         // ============================================================================
+        window.toggleControlPanel = function(show) {
+            const panelBody = document.getElementById('control-panel-body');
+            const minBar = document.getElementById('control-panel-minimized');
+            if (show) {
+                panelBody.classList.remove('collapsed');
+                minBar.classList.add('hidden');
+            } else {
+                panelBody.classList.add('collapsed');
+                setTimeout(() => {
+                    if (panelBody.classList.contains('collapsed')) {
+                        minBar.classList.remove('hidden');
+                    }
+                }, 220);
+            }
+        };
+
         let currentWallMode = 'full';
         let targetWallScale = 1.0;
         let currentWallScale = 1.0;
